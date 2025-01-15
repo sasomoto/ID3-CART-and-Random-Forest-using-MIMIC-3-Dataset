@@ -1,0 +1,61 @@
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+# Define the features you want to scale
+features = ['RESP', 'BP-S', 'BP-D', 'SpO2', 'HR'] # Example feature names, replace with your actual features
+
+patient_1_df[features] = scaler.fit_transform(patient_1_df[features])
+patient_2_df[features] = scaler.fit_transform(patient_2_df[features])
+
+patient_1_df['BP-Ratio'] = patient_1_df['BP-S'] / patient_1_df['BP-D']
+patient_2_df['BP-Ratio'] = patient_2_df['BP-S'] / patient_2_df['BP-D']
+patient_1_df = patient_1_df.drop(columns=['Patient'])
+patient_2_df = patient_2_df.drop(columns=['Patient'])
+
+# Calculate correlations with Anomaly
+corr_matrix_1 = patient_1_df.corr()
+print("Correlations with Anomaly in Patient 1 data:")
+print(corr_matrix_1['Anomaly'].sort_values(ascending=False))
+
+corr_matrix_2 = patient_2_df.corr()
+print("Correlations with Anomaly in Patient 2 data:")
+print(corr_matrix_2['Anomaly'].sort_values(ascending=False))
+
+# Correlation matrix for Patient 1 data
+corr_matrix_1 = patient_1_df.corr()
+
+# Correlation heatmap for Patient 1
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr_matrix_1, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+plt.title('Correlation Heatmap - Patient 1 Data')
+plt.show()
+
+# Correlation matrix for Patient 2 data
+corr_matrix_2 = patient_2_df.corr()
+
+# Correlation heatmap for Patient 2
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr_matrix_2, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+plt.title('Correlation Heatmap - Patient 2 Data')
+plt.show()
+
+from sklearn.model_selection import train_test_split
+
+# Features and target variable for Patient 1
+X_patient_1 = patient_1_df.drop('Anomaly', axis=1)
+y_patient_1 = patient_1_df['Anomaly']
+
+# 80-20 train-test split for Patient 1
+X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(X_patient_1, y_patient_1, test_size=0.2, random_state=42)
+
+# Features and target variable for Patient 2
+X_patient_2 = patient_2_df.drop('Anomaly', axis=1)
+y_patient_2 = patient_2_df['Anomaly']
+
+# 80-20 train-test split for Patient 2
+X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(X_patient_2, y_patient_2, test_size=0.2, random_state=42)
+
+# Checking the sizes of train and test sets
+print(f'Patient 1 Train set size: {X_train_1.shape}, Test set size: {X_test_1.shape}')
+print(f'Patient 2 Train set size: {X_train_2.shape}, Test set size: {X_test_2.shape}')
