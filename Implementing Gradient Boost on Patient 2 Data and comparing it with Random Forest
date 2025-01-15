@@ -1,0 +1,25 @@
+
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.metrics import accuracy_score, log_loss
+
+
+
+# Initialize lists to store results for GBDT
+gbdt_accuracies = []
+gbdt_log_losses = []
+num_trees = range(10, 210, 10)  # Number of trees from 10 to 200
+
+# Train Gradient Boosted Decision Trees with varying number of trees
+for n_trees in num_trees:
+    gbdt_model = GradientBoostingClassifier(n_estimators=n_trees, random_state=42)
+    gbdt_model.fit(X_train_2, y_train_2)
+
+    # Predict probabilities and labels for test set
+    y_pred_proba_gbdt = gbdt_model.predict_proba(X_test_2)
+    y_pred_gbdt = gbdt_model.predict(X_test_2)
+
+    # Calculate accuracy and log loss
+    gbdt_accuracies.append(accuracy_score(y_test_2, y_pred_gbdt))
+    gbdt_log_losses.append(log_loss(y_test_2, y_pred_proba_gbdt))
+
+
