@@ -1,0 +1,58 @@
+patient_1_df = pd.read_csv('221.csv')
+patient_2_df = pd.read_csv('230.csv')
+
+# Display the first few rows of the datasets
+print("Patient 1 Data:")
+print(patient_1_df.head())
+
+print("\nPatient 2 Data:")
+print(patient_2_df.head())
+
+# Get summary statistics
+print("Summary statistics for Patient 1 data:")
+print(patient_1_df.describe())
+
+print("\nSummary statistics for Patient 2 data:")
+print(patient_2_df.describe())
+# Check for missing values
+print("Missing values in Patient 1 data:")
+print(patient_1_df.isnull().sum())
+
+print("\nMissing values in Patient 2 data:")
+print(patient_2_df.isnull().sum())
+
+# Distribution of target variable
+print("Distribution of Anomaly in Patient 1 data:")
+print(patient_1_df['Anomaly'].value_counts())
+
+print("\nDistribution of Anomaly in Patient 2 data:")
+print(patient_2_df['Anomaly'].value_counts())
+
+# Visualize the distribution
+sns.countplot(x='Anomaly', data=patient_1_df)
+i . plt.title("Anomaly Distribution in Patient 1 Data")
+plt.show()
+
+sns.countplot(x='Anomaly', data=patient_2_df)
+plt.title("Anomaly Distribution in Patient 2 Data")
+plt.show()
+
+# Add a new column to each dataset to identify the patient
+patient_1_df['Patient'] = 'Patient 1'
+patient_2_df['Patient'] = 'Patient 2'
+
+# Combine the datasets
+combined_df = pd.concat([patient_1_df, patient_2_df], ignore_index=True)
+
+# Display the first few rows of the combined dataset
+print("Combined Patient Data:")
+print(combined_df.head())
+
+
+
+sns.pairplot(combined_df, hue="Patient", diag_kind='kde', palette='Set1')
+
+# Show the plot
+plt.suptitle("Pairwise Scatter Plots of Features for Patient 1 and Patient 2", y=1.02)
+plt.show()
+
