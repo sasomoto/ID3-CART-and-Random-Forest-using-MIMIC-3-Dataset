@@ -1,0 +1,30 @@
+# Import necessary libraries for Scikit-Learn
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+
+# Initialize and train the DecisionTreeClassifier from Scikit-Learn
+cart_model_sklearn = DecisionTreeClassifier(random_state=42, criterion='gini')  # 'gini' is the default for CART
+cart_model_sklearn.fit(X_train_2, y_train_2)
+
+# Predict using the Scikit-Learn CART model
+y_pred_sklearn = cart_model_sklearn.predict(X_test_2)
+
+# Evaluate the Scikit-Learn CART model
+accuracy_sklearn = accuracy_score(y_test_2, y_pred_sklearn)
+print(f"Scikit-Learn CART Accuracy: {accuracy_sklearn}")
+
+# Print classification report for Scikit-Learn CART
+print("Classification Report for Scikit-Learn CART on Patient 2 Test Set:")
+print(classification_report(y_test_2, y_pred_sklearn))
+
+# Confusion matrix for Scikit-Learn CART
+conf_matrix_sklearn = confusion_matrix(y_test_2, y_pred_sklearn)
+
+# Plot confusion matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix_sklearn, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.title("Confusion Matrix for Scikit-Learn CART on Patient 2")
+plt.ylabel("True Label")
+plt.xlabel("Predicted Label")
+plt.show()
