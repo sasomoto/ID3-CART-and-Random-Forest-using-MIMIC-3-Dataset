@@ -1,0 +1,34 @@
+# Import TensorFlow and TensorFlow Decision Forests
+import tensorflow_decision_forests as tfdf
+import tensorflow as tf
+
+# Convert data to TensorFlow Dataset format
+train_ds = tfdf.keras.pd_dataframe_to_tf_dataset(X_train_2.assign(label=y_train_2), label="label")
+test_ds = tfdf.keras.pd_dataframe_to_tf_dataset(X_test_2.assign(label=y_test_2), label="label")
+
+# Initialize and train TensorFlow Decision Tree model
+cart_model_tf = tfdf.keras.CartModel()
+cart_model_tf.fit(train_ds)
+
+# Predict using the TensorFlow CART model
+y_pred_tf = cart_model_tf.predict(test_ds)
+y_pred_tf_classes = (y_pred_tf > 0.5).astype("int32")
+
+# Evaluate the TensorFlow CART model
+accuracy_tf = accuracy_score(y_test_2, y_pred_tf_classes)
+print(f"TensorFlow CART Accuracy: {accuracy_tf}")
+
+# Print classification report for TensorFlow CART
+print("Classification Report for TensorFlow CART on Patient 2 Test Set:")
+print(classification_report(y_test_2, y_pred_tf_classes))
+
+# Confusion matrix for TensorFlow CART
+conf_matrix_tf = confusion_matrix(y_test_2, y_pred_tf_classes)
+
+# Plot confusion matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix_tf, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.title("Confusion Matrix for TensorFlow CART on Patient 2")
+plt.ylabel("True Label")
+plt.xlabel("Predicted Label")
+plt.show()
