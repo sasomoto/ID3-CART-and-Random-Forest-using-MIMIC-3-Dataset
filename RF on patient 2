@@ -1,0 +1,41 @@
+import tensorflow_decision_forests as tfdf
+
+from sklearn.metrics import classification_report, confusion_matrix
+from IPython.display import display, SVG
+
+
+# Create and train the Random Forest model
+model = tfdf.keras.RandomForestModel(task=tfdf.keras.Task.CLASSIFICATION)
+model.fit(train_df)
+
+# Evaluate the model
+evaluation = model.evaluate(test_df)
+print(evaluation)
+
+# Predictions
+predictions = model.predict(test_df)
+
+# Access predicted probabilities
+predicted_probabilities = predictions.flatten()
+
+# Convert probabilities to class labels (0 or 1)
+predicted_labels = (predicted_probabilities > 0.5).astype(int)
+
+# Convert test_df to DataFrame for comparison
+test_df_labels = next(iter(test_df.unbatch().batch(5000)))
+
+# Access the label from the tuple
+y_test_true = test_df_labels[1].numpy()
+
+# Generate classification report and confusion matrix
+print(classification_report(y_test_true, predicted_labels))
+conf_matrix = confusion_matrix(y_test_true, predicted_labels)
+
+# Plot confusion matrix
+plt.figure(figsize=(10, 7))
+sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues",
+            xticklabels=['Normal', 'Anomaly'], yticklabels=['Normal', 'Anomaly'])
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix for Random Forest Model')
+plt.show()
