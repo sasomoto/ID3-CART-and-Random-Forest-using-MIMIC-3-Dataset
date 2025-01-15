@@ -1,0 +1,26 @@
+!pip install tensorflow_decision_forests
+
+# Import OS environment variables
+import os
+
+# Import data handling and numerical computation libraries
+import pandas as pd
+import numpy as np
+
+# Import TensorFlow and TensorFlow Decision Forests libraries
+import tensorflow as tf
+import tensorflow_decision_forests as tfdf
+
+# Import Scikit-Learn for decision tree algorithms and other utilities
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, log_loss, classification_report, confusion_matrix
+
+# Visualization libraries
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from google.colab import files
+
+# Upload the CSV files
+uploaded = files.upload()
